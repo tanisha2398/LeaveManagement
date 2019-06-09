@@ -15,6 +15,15 @@ app.get("/hod/login", (req, res) => {
 app.get("/warden/login", (req, res) => {
   res.render("login");
 });
+app.get("/student/register", (req, res) => {
+  res.render("register");
+});
+app.get("/warden/register", (req, res) => {
+  res.render("wardenregister");
+});
+app.get("/hod/register", (req, res) => {
+  res.render("hodregister");
+});
 
 const port = process.env.PORT || 3005;
 app.listen(port, () => {
