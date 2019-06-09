@@ -6,6 +6,15 @@ app.use(express.static(__dirname + "/public"));
 app.get("/", (req, res) => {
   res.render("home");
 });
+app.get("/student/login", (req, res) => {
+  res.render("login");
+});
+app.get("/hod/login", (req, res) => {
+  res.render("login");
+});
+app.get("/warden/login", (req, res) => {
+  res.render("login");
+});
 
 const port = process.env.PORT || 3005;
 app.listen(port, () => {
