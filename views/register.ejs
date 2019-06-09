@@ -16,7 +16,7 @@
     top: 149px;
     left: 449px;"
     >
-      <form action="#" method="POST">
+      <form action="/student/register" method="POST">
         <!-- name -->
         <div class="form-group">
           <input
@@ -28,7 +28,12 @@
         </div>
         <!-- id -->
         <div class="form-group">
-          <input class="form-control" type="text" placeholder="ID" name="ID" />
+          <input
+            class="form-control"
+            type="text"
+            placeholder="username"
+            name="username"
+          />
         </div>
         <!-- password -->
         <div class="form-group">
@@ -44,7 +49,7 @@
           <input
             class="form-control"
             type="password"
-            name="confirmpassword"
+            name="password2"
             placeholder="Confirm password"
           />
         </div>
@@ -81,7 +86,10 @@
         </div>
 
         <div class="form-group">
-          <button class="btn btn-lg btn-dark btn-default btn-block">
+          <button
+            type="submit"
+            class="btn btn-lg btn-dark btn-default btn-block"
+          >
             Submit
           </button>
         </div>
