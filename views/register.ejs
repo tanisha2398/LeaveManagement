@@ -12,10 +12,19 @@
     <div
       style="    width: 30%;
     margin: 25px auto;
-    position: fixed;
+    position: relative;
     top: 149px;
-    left: 449px;"
+    left: -42px;"
     >
+      <% if (locals.errors) { %>
+      <div class="alert alert-danger" role="alert">
+        <% locals.errors.forEach(function(errors) { %>
+        <h5><%= errors.msg %></h5>
+
+        <% }); %>
+      </div>
+      <% } %>
+
       <form action="/student/register" method="POST">
         <!-- name -->
         <div class="form-group">
@@ -94,6 +103,7 @@
           </button>
         </div>
       </form>
+
       <a href="/">Back</a>
     </div>
   </div>

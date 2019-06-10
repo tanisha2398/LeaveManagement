@@ -27,10 +27,10 @@ mongoose
   });
 
 app.set("view engine", "ejs");
+app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
 app.use(expressvalidator());
-app.use(flash());
 
 //passport config
 app.use(
@@ -70,9 +70,28 @@ passport.deserializeUser(function(id, done) {
 });
 // passport.serializeUser(Student.serializeUser());
 // passport.deserializeUser(Student.deserializeUser());
+// app.use(
+//   expressvalidator({
+//     errorFormatter: function(param, msg, value) {
+//       var namespace = param.split("."),
+//         root = namespace.shift(),
+//         formParam = root;
 
+//       while (namespace.length) {
+//         formParam += "[" + namespace.shift() + "]";
+//       }
+//       return {
+//         param: formParam,
+//         msg: msg,
+//         value: value
+//       };
+//     }
+//   })
+// );
+app.use(flash());
 app.use((req, res, next) => {
   //   res.locals.currentUser = req.user;
+  res.locals.error_msg = req.flash("error_msg");
   res.locals.error = req.flash("error");
   res.locals.success = req.flash("success");
   next();
@@ -102,6 +121,7 @@ app.post("/student/register", (req, res) => {
   var password2 = req.body.password2;
   var hostel = req.body.hostel;
   var department = req.body.department;
+  //validation
   req.checkBody("name", "name is required").notEmpty();
   req.checkBody("username", "Username is required").notEmpty();
   req.checkBody("hostel", "hostel is required").notEmpty();
@@ -111,6 +131,9 @@ app.post("/student/register", (req, res) => {
 
   var errors = req.validationErrors();
   if (errors) {
+    // req.session.errors = errors;
+    // req.session.success = false;
+    console.log("errors: " + errors);
     res.render("register", {
       errors: errors
     });
