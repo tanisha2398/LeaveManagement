@@ -86,12 +86,23 @@ app.use((req, res, next) => {
   res.locals.error_msg = req.flash("error_msg");
   res.locals.error = req.flash("error");
   res.locals.success = req.flash("success");
+  res.locals.user = req.user || null;
   next();
 });
 
 app.get("/", (req, res) => {
   res.render("home");
 });
+
+// function ensureAuthenticated(req, res, next) {
+//   if (req.isAuthenticated()) {
+//     return next();
+//   } else {
+//     req.flash("error", "You need to be logged in");
+//     res.redirect("/student/login");
+//   }
+// }
+
 app.get("/student/login", (req, res) => {
   res.render("login");
 });
@@ -192,6 +203,15 @@ app.post("/student/register", (req, res) => {
     res.redirect("/student/login");
   }
 });
+
+//logout for student
+
+app.get("/student/logout", (req, res) => {
+  req.logout();
+  req.flash("success", "you are logged out");
+  res.redirect("/student/login");
+});
+
 // app.post("/student/register", (req, res) => {
 //   Student.register(
 //     new Student({ username: req.body.username }),
