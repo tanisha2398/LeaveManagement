@@ -12,10 +12,18 @@
     <div
       style="    width: 30%;
     margin: 25px auto;
-    position: fixed;
+    position: relative;
     top: 169px;
-    left: 449px;"
+    left: -21px;"
     >
+      <% if (locals.errors) { %>
+      <div class="alert alert-danger" role="alert">
+        <% locals.errors.forEach(function(errors) { %>
+        <h5><%= errors.msg %></h5>
+
+        <% }); %>
+      </div>
+      <% } %>
       <form action="/hod/register" method="POST">
         <!-- name -->
         <div class="form-group">
@@ -28,7 +36,12 @@
         </div>
         <!-- id -->
         <div class="form-group">
-          <input class="form-control" type="text" placeholder="ID" name="ID" />
+          <input
+            class="form-control"
+            type="text"
+            placeholder="username"
+            name="username"
+          />
         </div>
         <!-- password -->
         <div class="form-group">
@@ -44,7 +57,7 @@
           <input
             class="form-control"
             type="password"
-            name="confirmpassword"
+            name="password2"
             placeholder="Confirm password"
           />
         </div>

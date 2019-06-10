@@ -153,7 +153,7 @@ app.post(
 );
 
 app.get("/hod/login", (req, res) => {
-  res.render("login");
+  res.render("hodlogin");
 });
 app.get("/warden/login", (req, res) => {
   res.render("login");
@@ -212,30 +212,47 @@ app.get("/student/logout", (req, res) => {
   res.redirect("/student/login");
 });
 
-// app.post("/student/register", (req, res) => {
-//   Student.register(
-//     new Student({ username: req.body.username }),
-//     req.body.password,
-//     (err, student) => {
-//       if (err) {
-//         console.log(err);
-//         return res.render("register", { error: err.message });
-//       }
-//       passport.authenticate("local")(req, res, () => {
-//         req.flash(
-//           "success",
-//           "Succesfully registered !Welcome to Banathali" + student.username
-//         );
-//         res.redirect("/");
-//       });
-//     }
-//   );
-// });
 app.get("/warden/register", (req, res) => {
   res.render("wardenregister");
 });
+//hod register
 app.get("/hod/register", (req, res) => {
   res.render("hodregister");
+});
+//hod register logic
+app.post("/hod/register", (req, res) => {
+  var name = req.body.name;
+  var username = req.body.username;
+  var password = req.body.password;
+  var password2 = req.body.password2;
+  var department = req.body.department;
+
+  req.checkBody("name", "Name is required").notEmpty();
+  req.checkBody("username", "Username is required").notEmpty();
+  req.checkBody("password", "password is required").notEmpty();
+  req.checkBody("department", "department is required").notEmpty();
+  req.checkBody("password2", "Password dont match").equals(req.body.password);
+
+  var errors = req.validationErrors();
+  if (errors) {
+    res.render("hodregister", {
+      errors: errors
+    });
+  } else {
+    var newHod = new Hod({
+      name: name,
+      username: username,
+      password: password,
+      department: department
+    });
+    Hod.createHod(newHod, (err, hod) => {
+      if (err) throw err;
+      console.log(hod);
+    });
+    req.flash("success", "you are registered successfully,now you can login");
+
+    res.redirect("/hod/login");
+  }
 });
 
 const port = process.env.PORT || 3005;
