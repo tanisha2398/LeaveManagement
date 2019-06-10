@@ -43,31 +43,23 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 // passport.use(new LocalStrategy(Student.authenticate()));
-passport.use(
-  new LocalStrategy(function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
-      if (err) {
-        return done(err);
-      }
-      if (!user) {
-        return done(null, false);
-      }
-      if (!user.verifyPassword(password)) {
-        return done(null, false);
-      }
-      return done(null, user);
-    });
-  })
-);
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
+// passport.use(
+//   new LocalStrategy(function(username, password, done) {
+//     User.findOne({ username: username }, function(err, user) {
+//       if (err) {
+//         return done(err);
+//       }
+//       if (!user) {
+//         return done(null, false);
+//       }
+//       if (!user.verifyPassword(password)) {
+//         return done(null, false);
+//       }
+//       return done(null, user);
+//     });
+//   })
+// );
 
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
 // passport.serializeUser(Student.serializeUser());
 // passport.deserializeUser(Student.deserializeUser());
 // app.use(
@@ -103,6 +95,52 @@ app.get("/", (req, res) => {
 app.get("/student/login", (req, res) => {
   res.render("login");
 });
+//login logic for Student
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    Student.getUserByUsername(username, (err, student) => {
+      if (err) throw err;
+      if (!student) {
+        return done(null, false, { message: "Unknown User" });
+      }
+      Student.comparePassword(
+        password,
+        student.password,
+        (err, passwordFound) => {
+          if (err) throw err;
+          if (passwordFound) {
+            return done(null, student);
+          } else {
+            return done(null, false, { message: "Invalid Password" });
+          }
+        }
+      );
+    });
+  })
+);
+
+passport.serializeUser(function(student, done) {
+  done(null, student.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  Student.getUserById(id, function(err, student) {
+    done(err, student);
+  });
+});
+
+app.post(
+  "/student/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/student/login",
+    failureFlash: true
+  }),
+  (req, res) => {
+    res.redirect("/");
+  }
+);
+
 app.get("/hod/login", (req, res) => {
   res.render("login");
 });

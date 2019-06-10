@@ -11,7 +11,7 @@ var studentSchema = new mongoose.Schema({
   image: String
 });
 studentSchema.plugin(passportLocalMongoose);
-module.exports = mongoose.model("Student", studentSchema);
+var Student = (module.exports = mongoose.model("Student", studentSchema));
 
 module.exports.createStudent = function(newStudent, callback) {
   bcrypt.genSalt(10, function(err, salt) {
@@ -19,5 +19,21 @@ module.exports.createStudent = function(newStudent, callback) {
       newStudent.password = hash;
       newStudent.save(callback);
     });
+  });
+};
+
+module.exports.getUserByUsername = function(username, callback) {
+  var query = { username: username };
+  Student.findOne(query, callback);
+};
+
+module.exports.getUserById = function(id, callback) {
+  Student.findById(id, callback);
+};
+
+module.exports.comparePassword = function(candidatePassword, hash, callback) {
+  bcrypt.compare(candidatePassword, hash, function(err, passwordFound) {
+    if (err) throw err;
+    callback(null, passwordFound);
   });
 };
