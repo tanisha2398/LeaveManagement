@@ -21,3 +21,19 @@ module.exports.createHod = function(newHod, callback) {
     });
   });
 };
+
+module.exports.getUserByUsername = function(username, callback) {
+  var query = { username: username };
+  Hod.findOne(query, callback);
+};
+
+module.exports.getUserById = function(id, callback) {
+  Hod.findById(id, callback);
+};
+
+module.exports.comparePassword = function(candidatePassword, hash, callback) {
+  bcrypt.compare(candidatePassword, hash, function(err, passwordFound) {
+    if (err) throw err;
+    callback(null, passwordFound);
+  });
+};

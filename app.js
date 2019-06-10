@@ -155,6 +155,49 @@ app.post(
 app.get("/hod/login", (req, res) => {
   res.render("hodlogin");
 });
+
+//login logic for Hod
+passport.use(
+  new LocalStrategy((username, password, done) => {
+    Hod.getUserByUsername(username, (err, hod) => {
+      if (err) throw err;
+      if (!hod) {
+        return done(null, false, { message: "Unknown User" });
+      }
+      Hod.comparePassword(password, hod.password, (err, passwordFound) => {
+        if (err) throw err;
+        if (passwordFound) {
+          return done(null, hod);
+        } else {
+          return done(null, false, { message: "Invalid Password" });
+        }
+      });
+    });
+  })
+);
+
+passport.serializeUser(function(hod, done) {
+  done(null, hod.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  Hod.getUserById(id, function(err, hod) {
+    done(err, hod);
+  });
+});
+
+app.post(
+  "/hod/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/hod/login",
+    failureFlash: true
+  }),
+  (req, res) => {
+    res.redirect("/");
+  }
+);
+
 app.get("/warden/login", (req, res) => {
   res.render("login");
 });
