@@ -103,11 +103,139 @@ app.get("/", (req, res) => {
 //   }
 // }
 
-app.get("/student/login", (req, res) => {
-  res.render("login");
-});
 //login logic for Student
+
+//login logic for Hod
+
+// passport.serializeUser(function(hod, done) {
+//   done(null, hod.id);
+// });
+
+// passport.deserializeUser(function(id, done) {
+
+// });
+
+//registration form
+app.get("/register", (req, res) => {
+  res.render("register");
+});
+//registration logic
+app.post("/student/register", (req, res) => {
+  var type = req.body.type;
+  if (type == "student") {
+    var name = req.body.name;
+    var username = req.body.username;
+    var password = req.body.password;
+    var password2 = req.body.password2;
+    var hostel = req.body.hostel;
+    var department = req.body.department;
+    //validation
+    req.checkBody("name", "name is required").notEmpty();
+    req.checkBody("username", "Username is required").notEmpty();
+    req.checkBody("hostel", "hostel is required").notEmpty();
+    req.checkBody("department", "department is required").notEmpty();
+    req.checkBody("password", "Password is required").notEmpty();
+    req.checkBody("password2", "Password dont match").equals(req.body.password);
+
+    var errors = req.validationErrors();
+    if (errors) {
+      // req.session.errors = errors;
+      // req.session.success = false;
+      console.log("errors: " + errors);
+      res.render("register", {
+        errors: errors
+      });
+    } else {
+      var newStudent = new Student({
+        name: name,
+        username: username,
+        password: password,
+        department: department,
+        hostel: hostel,
+        type: type
+      });
+      Student.createStudent(newStudent, (err, student) => {
+        if (err) throw err;
+        console.log(student);
+      });
+      req.flash("success", "you are registered successfully,now you can login");
+
+      res.redirect("/student/login");
+    }
+  } else if (type == "hod") {
+    var name = req.body.name;
+    var username = req.body.username;
+    var password = req.body.password;
+    var password2 = req.body.password2;
+    var department = req.body.department;
+
+    req.checkBody("name", "Name is required").notEmpty();
+    req.checkBody("username", "Username is required").notEmpty();
+    req.checkBody("password", "password is required").notEmpty();
+    req.checkBody("department", "department is required").notEmpty();
+    req.checkBody("password2", "Password dont match").equals(req.body.password);
+
+    var errors = req.validationErrors();
+    if (errors) {
+      res.render("register", {
+        errors: errors
+      });
+    } else {
+      var newHod = new Hod({
+        name: name,
+        username: username,
+        password: password,
+        department: department,
+        type: type
+      });
+      Hod.createHod(newHod, (err, hod) => {
+        if (err) throw err;
+        console.log(hod);
+      });
+      req.flash("success", "you are registered successfully,now you can login");
+
+      res.redirect("/hod/login");
+    }
+  } else if (type == "warden") {
+    var name = req.body.name;
+    var username = req.body.username;
+    var password = req.body.password;
+    var password2 = req.body.password2;
+    var hostel = req.body.hostel;
+
+    req.checkBody("name", "Name is required").notEmpty();
+    req.checkBody("username", "Username is required").notEmpty();
+    req.checkBody("password", "password is required").notEmpty();
+    req.checkBody("hostel", "hostel is required").notEmpty();
+    req.checkBody("password2", "Password dont match").equals(req.body.password);
+
+    var errors = req.validationErrors();
+    if (errors) {
+      res.render("register", {
+        errors: errors
+      });
+    } else {
+      var newWarden = new Warden({
+        name: name,
+        username: username,
+        password: password,
+        hostel: hostel,
+        type: type
+      });
+      Warden.createWarden(newWarden, (err, warden) => {
+        if (err) throw err;
+        console.log(warden);
+      });
+      req.flash("success", "you are registered successfully,now you can login");
+
+      res.redirect("/warden/login");
+    }
+  }
+});
+
+//stratergies
 passport.use(
+  "student",
   new LocalStrategy((username, password, done) => {
     Student.getUserByUsername(username, (err, student) => {
       if (err) throw err;
@@ -130,34 +258,8 @@ passport.use(
   })
 );
 
-passport.serializeUser(function(student, done) {
-  done(null, student.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  Student.getUserById(id, function(err, student) {
-    done(err, student);
-  });
-});
-
-app.post(
-  "/student/login",
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/student/login",
-    failureFlash: true
-  }),
-  (req, res) => {
-    res.redirect("/");
-  }
-);
-
-app.get("/hod/login", (req, res) => {
-  res.render("hodlogin");
-});
-
-//login logic for Hod
 passport.use(
+  "hod",
   new LocalStrategy((username, password, done) => {
     Hod.getUserByUsername(username, (err, hod) => {
       if (err) throw err;
@@ -176,19 +278,85 @@ passport.use(
   })
 );
 
-passport.serializeUser(function(hod, done) {
-  done(null, hod.id);
+passport.use(
+  "warden",
+  new LocalStrategy((username, password, done) => {
+    Warden.getUserByUsername(username, (err, warden) => {
+      if (err) throw err;
+      if (!warden) {
+        return done(null, false, { message: "Unknown User" });
+      }
+      Warden.comparePassword(
+        password,
+        warden.password,
+        (err, passwordFound) => {
+          if (err) throw err;
+          if (passwordFound) {
+            return done(null, warden);
+          } else {
+            return done(null, false, { message: "Invalid Password" });
+          }
+        }
+      );
+    });
+  })
+);
+
+//srialize
+
+passport.serializeUser(function(user, done) {
+  console.log(user.id);
+  done(null, { id: user.id, type: user.type });
 });
 
-passport.deserializeUser(function(id, done) {
-  Hod.getUserById(id, function(err, hod) {
-    done(err, hod);
-  });
+//deserialize
+
+passport.deserializeUser(function(obj, done) {
+  switch (obj.type) {
+    case "student":
+      Student.getUserById(obj.id, function(err, student) {
+        done(err, student);
+      });
+      break;
+    case "hod":
+      Hod.getUserById(obj.id, function(err, hod) {
+        done(err, hod);
+      });
+      break;
+    case "warden":
+      Warden.getUserById(obj.id, function(err, warden) {
+        done(err, warden);
+      });
+      break;
+    default:
+      done(new Error("no entity type:", obj.type), null);
+      break;
+  }
+});
+
+app.get("/student/login", (req, res) => {
+  res.render("login");
+});
+
+app.post(
+  "/student/login",
+  passport.authenticate("student", {
+    successRedirect: "/",
+    failureRedirect: "/student/login",
+    failureFlash: true
+  }),
+  (req, res) => {
+    res.redirect("/");
+  }
+);
+
+app.get("/hod/login", (req, res) => {
+  res.render("hodlogin");
 });
 
 app.post(
   "/hod/login",
-  passport.authenticate("local", {
+  passport.authenticate("hod", {
     successRedirect: "/",
     failureRedirect: "/hod/login",
     failureFlash: true
@@ -197,105 +365,28 @@ app.post(
     res.redirect("/");
   }
 );
-
 app.get("/warden/login", (req, res) => {
-  res.render("login");
+  res.render("wardenlogin");
 });
-// show student registration form
-app.get("/student/register", (req, res) => {
-  res.render("register");
-});
-//student registration logic
-app.post("/student/register", (req, res) => {
-  var name = req.body.name;
-  var username = req.body.username;
-  var password = req.body.password;
-  var password2 = req.body.password2;
-  var hostel = req.body.hostel;
-  var department = req.body.department;
-  //validation
-  req.checkBody("name", "name is required").notEmpty();
-  req.checkBody("username", "Username is required").notEmpty();
-  req.checkBody("hostel", "hostel is required").notEmpty();
-  req.checkBody("department", "department is required").notEmpty();
-  req.checkBody("password", "Password is required").notEmpty();
-  req.checkBody("password2", "Password dont match").equals(req.body.password);
 
-  var errors = req.validationErrors();
-  if (errors) {
-    // req.session.errors = errors;
-    // req.session.success = false;
-    console.log("errors: " + errors);
-    res.render("register", {
-      errors: errors
-    });
-  } else {
-    var newStudent = new Student({
-      name: name,
-      username: username,
-      password: password,
-      department: department,
-      hostel: hostel
-    });
-    Student.createStudent(newStudent, (err, student) => {
-      if (err) throw err;
-      console.log(student);
-    });
-    req.flash("success", "you are registered successfully,now you can login");
-
-    res.redirect("/student/login");
+app.post(
+  "/warden/login",
+  passport.authenticate("warden", {
+    successRedirect: "/",
+    failureRedirect: "/warden/login",
+    failureFlash: true
+  }),
+  (req, res) => {
+    res.redirect("/");
   }
-});
+);
 
 //logout for student
 
-app.get("/student/logout", (req, res) => {
+app.get("/logout", (req, res) => {
   req.logout();
   req.flash("success", "you are logged out");
-  res.redirect("/student/login");
-});
-
-app.get("/warden/register", (req, res) => {
-  res.render("wardenregister");
-});
-//hod register
-app.get("/hod/register", (req, res) => {
-  res.render("hodregister");
-});
-//hod register logic
-app.post("/hod/register", (req, res) => {
-  var name = req.body.name;
-  var username = req.body.username;
-  var password = req.body.password;
-  var password2 = req.body.password2;
-  var department = req.body.department;
-
-  req.checkBody("name", "Name is required").notEmpty();
-  req.checkBody("username", "Username is required").notEmpty();
-  req.checkBody("password", "password is required").notEmpty();
-  req.checkBody("department", "department is required").notEmpty();
-  req.checkBody("password2", "Password dont match").equals(req.body.password);
-
-  var errors = req.validationErrors();
-  if (errors) {
-    res.render("hodregister", {
-      errors: errors
-    });
-  } else {
-    var newHod = new Hod({
-      name: name,
-      username: username,
-      password: password,
-      department: department
-    });
-    Hod.createHod(newHod, (err, hod) => {
-      if (err) throw err;
-      console.log(hod);
-    });
-    req.flash("success", "you are registered successfully,now you can login");
-
-    res.redirect("/hod/login");
-  }
+  res.redirect("/");
 });
 
 const port = process.env.PORT || 3005;

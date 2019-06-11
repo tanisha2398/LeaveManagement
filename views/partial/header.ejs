@@ -29,27 +29,15 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
             <% if(user){%>
+            <li><a href="#">Signed in as <%= user.type%></a></li>
+
             <li class="nav-item">
-              <a class="nav-link" href="/student/logout">Logout </a>
+              <a class="nav-link" href="/logout">Logout </a>
             </li>
+
             <%}%> <% if(!user){%>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="navbarDropdown"
-                role="button"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                Register
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/student/register">Student</a>
-                <a class="dropdown-item" href="/hod/register">HOD</a>
-                <a class="dropdown-item" href="/warden/register">Warden</a>
-              </div>
+            <li class="nav-item">
+              <a class="nav-link" href="/register">Register </a>
             </li>
             <li class="nav-item dropdown">
               <a
