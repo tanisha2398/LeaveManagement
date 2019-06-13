@@ -444,22 +444,18 @@ app.get("/hod/:id/edit", ensureAuthenticated, (req, res) => {
     res.render("editH", { hod: foundHod });
   });
 });
-// app.put("/hod/:id", ensureAuthenticated, (req, res) => {
-//   console.log(req.body.hod);
-//   Hod.findByIdAndUpdate(
-//     req.params.id,
-//     req.body.hod,
-//     (err, updatedStudent) => {
-//       if (err) {
-//         req.flash("error", err.message);
-//         res.redirect("back");
-//       } else {
-//         req.flash("success", "Succesfully updated");
-//         res.redirect("/hod/" + req.params.id);
-//       }
-//     }
-//   );
-// });
+app.put("/hod/:id", ensureAuthenticated, (req, res) => {
+  console.log(req.body.hod);
+  Hod.findByIdAndUpdate(req.params.id, req.body.hod, (err, updatedHod) => {
+    if (err) {
+      req.flash("error", err.message);
+      res.redirect("back");
+    } else {
+      req.flash("success", "Succesfully updated");
+      res.redirect("/hod/" + req.params.id);
+    }
+  });
+});
 
 app.get("/warden/login", (req, res) => {
   res.render("wardenlogin");
