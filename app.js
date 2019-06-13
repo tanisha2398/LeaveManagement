@@ -418,7 +418,6 @@ app.post(
   }
 );
 app.get("/hod/home", ensureAuthenticated, (req, res) => {
-  
   Hod.find({}, (err, hod) => {
     if (err) {
       console.log("err");
@@ -440,23 +439,23 @@ app.get("/hod/:id", ensureAuthenticated, (req, res) => {
     }
   });
 });
-// app.get("/student/:id/edit", ensureAuthenticated, (req, res) => {
-//   Student.findById(req.params.id, (err, foundStudent) => {
-//     res.render("editS", { student: foundStudent });
-//   });
-// });
-// app.put("/student/:id", ensureAuthenticated, (req, res) => {
-//   console.log(req.body.student);
-//   Student.findByIdAndUpdate(
+app.get("/hod/:id/edit", ensureAuthenticated, (req, res) => {
+  Hod.findById(req.params.id, (err, foundHod) => {
+    res.render("editH", { hod: foundHod });
+  });
+});
+// app.put("/hod/:id", ensureAuthenticated, (req, res) => {
+//   console.log(req.body.hod);
+//   Hod.findByIdAndUpdate(
 //     req.params.id,
-//     req.body.student,
+//     req.body.hod,
 //     (err, updatedStudent) => {
 //       if (err) {
 //         req.flash("error", err.message);
 //         res.redirect("back");
 //       } else {
 //         req.flash("success", "Succesfully updated");
-//         res.redirect("/student/" + req.params.id);
+//         res.redirect("/hod/" + req.params.id);
 //       }
 //     }
 //   );
