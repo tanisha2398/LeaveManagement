@@ -497,6 +497,11 @@ app.get("/warden/:id", ensureAuthenticated, (req, res) => {
     }
   });
 });
+app.get("/warden/:id/edit", ensureAuthenticated, (req, res) => {
+  Warden.findById(req.params.id, (err, foundWarden) => {
+    res.render("editW", { warden: foundWarden });
+  });
+});
 //logout for student
 
 app.get("/logout", (req, res) => {
