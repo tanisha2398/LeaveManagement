@@ -90,18 +90,17 @@ app.use((req, res, next) => {
   next();
 });
 
+function ensureAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    req.flash("error", "You need to be logged in");
+    res.redirect("/student/login");
+  }
+}
 app.get("/", (req, res) => {
   res.render("home");
 });
-
-// function ensureAuthenticated(req, res, next) {
-//   if (req.isAuthenticated()) {
-//     return next();
-//   } else {
-//     req.flash("error", "You need to be logged in");
-//     res.redirect("/student/login");
-//   }
-// }
 
 //login logic for Student
 
@@ -129,6 +128,7 @@ app.post("/student/register", (req, res) => {
     var password2 = req.body.password2;
     var hostel = req.body.hostel;
     var department = req.body.department;
+    var image = req.body.image;
     //validation
     req.checkBody("name", "name is required").notEmpty();
     req.checkBody("username", "Username is required").notEmpty();
@@ -152,7 +152,8 @@ app.post("/student/register", (req, res) => {
         password: password,
         department: department,
         hostel: hostel,
-        type: type
+        type: type,
+        image: image
       });
       Student.createStudent(newStudent, (err, student) => {
         if (err) throw err;
@@ -305,7 +306,7 @@ passport.use(
 //srialize
 
 passport.serializeUser(function(user, done) {
-  console.log(user.id);
+  // console.log(user.id);
   done(null, { id: user.id, type: user.type });
 });
 
@@ -341,14 +342,29 @@ app.get("/student/login", (req, res) => {
 app.post(
   "/student/login",
   passport.authenticate("student", {
-    successRedirect: "/",
+    successRedirect: "/student/profile",
     failureRedirect: "/student/login",
     failureFlash: true
   }),
   (req, res) => {
-    res.redirect("/");
+    // console.log(student);
+    res.redirect("/student/profile");
   }
 );
+
+app.get("/student/profile", (req, res) => {
+  // var student = req.user;
+  // console.log(student);
+  Student.find({}, (err, student) => {
+    if (err) {
+      console.log("err");
+    } else {
+      res.render("profilestud", {
+        student: req.user
+      });
+    }
+  });
+});
 
 app.get("/hod/login", (req, res) => {
   res.render("hodlogin");

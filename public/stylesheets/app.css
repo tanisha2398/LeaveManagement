@@ -1,3 +1,7 @@
+body {
+  font-family: "Comfortaa", cursive;
+}
+
 .carousel-item {
   height: 100vh;
   min-height: 300px;
@@ -24,11 +28,18 @@
   font-size: 10px;
   line-height: 1.9;
 }
+li a:hover {
+  background-color: #535555;
+}
+
 .navbar-default {
   background-color: #000000;
   border-color: #e7e7e7;
   color: #fff;
   height: 47px;
+  position: sticky;
+  top: 0;
+  width: 100%;
 }
 .navbar-brand {
   color: #fff;
@@ -43,6 +54,7 @@
 .navbar-nav .nav-item {
   color: #fff;
 }
+
 .navbar-dark .navbar-nav .nav-link {
   color: #fff;
 }
