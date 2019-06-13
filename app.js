@@ -342,29 +342,46 @@ app.get("/student/login", (req, res) => {
 app.post(
   "/student/login",
   passport.authenticate("student", {
-    successRedirect: "/student/profile",
+    successRedirect: "/student/home",
     failureRedirect: "/student/login",
     failureFlash: true
   }),
   (req, res) => {
     // console.log(student);
-    res.redirect("/student/profile");
+    res.redirect("/student/home");
   }
 );
 
-app.get("/student/profile", (req, res) => {
+app.get("/student/home", ensureAuthenticated, (req, res) => {
   // var student = req.user;
   // console.log(student);
   Student.find({}, (err, student) => {
     if (err) {
       console.log("err");
     } else {
-      res.render("profilestud", {
+      res.render("homestud", {
         student: req.user
       });
     }
   });
 });
+app.get("/student/:id", (req, res) => {
+  console.log(req.params.id);
+  Student.findById(req.params.id).exec((err, foundStudent) => {
+    if (err || !foundStudent) {
+      req.flash("error", "Student not found");
+      res.redirect("back");
+    } else {
+      res.render("profilestud", { student: foundStudent });
+    }
+  });
+});
+app.get("/student/:id/edit", (req, res) => {
+  Student.findById(req.params.id, (err, foundStudent) => {
+    res.render("editS", { student: foundStudent });
+  });
+});
+app;
 
 app.get("/hod/login", (req, res) => {
   res.render("hodlogin");
