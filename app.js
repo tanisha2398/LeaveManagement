@@ -502,6 +502,23 @@ app.get("/warden/:id/edit", ensureAuthenticated, (req, res) => {
     res.render("editW", { warden: foundWarden });
   });
 });
+
+app.put("/warden/:id", ensureAuthenticated, (req, res) => {
+  console.log(req.body.warden);
+  Warden.findByIdAndUpdate(
+    req.params.id,
+    req.body.warden,
+    (err, updatedWarden) => {
+      if (err) {
+        req.flash("error", err.message);
+        res.redirect("back");
+      } else {
+        req.flash("success", "Succesfully updated");
+        res.redirect("/warden/" + req.params.id);
+      }
+    }
+  );
+});
 //logout for student
 
 app.get("/logout", (req, res) => {
