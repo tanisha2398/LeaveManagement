@@ -171,6 +171,7 @@ app.post("/student/register", (req, res) => {
     var password = req.body.password;
     var password2 = req.body.password2;
     var department = req.body.department;
+    var image = req.body.image;
 
     req.checkBody("name", "Name is required").notEmpty();
     req.checkBody("username", "Username is required").notEmpty();
@@ -189,7 +190,8 @@ app.post("/student/register", (req, res) => {
         username: username,
         password: password,
         department: department,
-        type: type
+        type: type,
+        image: image
       });
       Hod.createHod(newHod, (err, hod) => {
         if (err) throw err;
@@ -407,14 +409,60 @@ app.get("/hod/login", (req, res) => {
 app.post(
   "/hod/login",
   passport.authenticate("hod", {
-    successRedirect: "/",
+    successRedirect: "/hod/home",
     failureRedirect: "/hod/login",
     failureFlash: true
   }),
   (req, res) => {
-    res.redirect("/");
+    res.redirect("/hod/home");
   }
 );
+app.get("/hod/home", ensureAuthenticated, (req, res) => {
+  // var student = req.user;
+  // console.log(student);
+  Hod.find({}, (err, hod) => {
+    if (err) {
+      console.log("err");
+    } else {
+      res.render("homehod", {
+        hod: req.user
+      });
+    }
+  });
+});
+// app.get("/student/:id", ensureAuthenticated, (req, res) => {
+//   console.log(req.params.id);
+//   Student.findById(req.params.id).exec((err, foundStudent) => {
+//     if (err || !foundStudent) {
+//       req.flash("error", "Student not found");
+//       res.redirect("back");
+//     } else {
+//       res.render("profilestud", { student: foundStudent });
+//     }
+//   });
+// });
+// app.get("/student/:id/edit", ensureAuthenticated, (req, res) => {
+//   Student.findById(req.params.id, (err, foundStudent) => {
+//     res.render("editS", { student: foundStudent });
+//   });
+// });
+// app.put("/student/:id", ensureAuthenticated, (req, res) => {
+//   console.log(req.body.student);
+//   Student.findByIdAndUpdate(
+//     req.params.id,
+//     req.body.student,
+//     (err, updatedStudent) => {
+//       if (err) {
+//         req.flash("error", err.message);
+//         res.redirect("back");
+//       } else {
+//         req.flash("success", "Succesfully updated");
+//         res.redirect("/student/" + req.params.id);
+//       }
+//     }
+//   );
+// });
+
 app.get("/warden/login", (req, res) => {
   res.render("wardenlogin");
 });

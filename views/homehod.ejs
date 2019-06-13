@@ -1,0 +1,52 @@
+<% include ./partial/header %>
+<script>
+  $(document).ready(function() {
+    $('[data-toggle="tooltip"]').tooltip();
+  });
+</script>
+<h1 style="margin-top: 61px; font-size: 20px;">Welcome, <%=hod.name%></h1>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3" style="list-style-type: none;">
+      <li>
+        <a
+          href="/hod/<%=hod._id%>"
+          data-toggle="tooltip"
+          title="Click to see your profile"
+          data-placement="left"
+          class="btn btn-primary btn-lg"
+          style="width: 210px;margin-top: 10px;"
+          >Profile</a
+        >
+      </li>
+      <li>
+        <a
+          href="#"
+          class="btn btn-success btn-lg"
+          style="width: 210px;margin-top: 10px;"
+          >Leave</a
+        >
+      </li>
+      <li>
+        <a
+          href="#"
+          class="btn btn-info btn-lg"
+          style="width: 210px;margin-top: 10px;"
+          >Track Leave</a
+        >
+      </li>
+    </div>
+    <div class="col-sm-9" style="margin: auto;    text-align: -webkit-center;">
+      <div class="thumbnail">
+        <img style="border-radius: 100%" src="<%=hod.image%>" />
+        <h1><strong>Name:</strong> <%=hod.name%></h1>
+        <h4><strong>Type:</strong><%=hod.type%></h4>
+
+        <h4>Username: <%=hod.username%></h4>
+        <h4>Department:<%=hod.department%></h4>
+      </div>
+    </div>
+
+    <% include ./partial/footer %>
+  </div>
+</div>
