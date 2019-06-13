@@ -1,0 +1,18 @@
+<% include ./partial/header %>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12" style="margin: auto;    text-align: -webkit-center;">
+      <div class="thumbnail">
+        <img style="border-radius: 100%" src="<%=warden.image%>" />
+        <h1><strong>Name:</strong> <%=warden.name%></h1>
+        <h4><strong>Type:</strong><%=warden.type%></h4>
+
+        <h4>Username: <%=warden.username%></h4>
+        <h4>Hostel:<%=warden.hostel%></h4>
+      </div>
+      <a class="btn btn-warning" href="/warden/<%=warden._id%>/edit">Edit</a>
+    </div>
+  </div>
+</div>
+
+<% include ./partial/footer %>

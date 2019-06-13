@@ -485,6 +485,18 @@ app.get("/warden/home", ensureAuthenticated, (req, res) => {
     }
   });
 });
+
+app.get("/warden/:id", ensureAuthenticated, (req, res) => {
+  console.log(req.params.id);
+  Warden.findById(req.params.id).exec((err, foundWarden) => {
+    if (err || !foundWarden) {
+      req.flash("error", "Warden not found");
+      res.redirect("back");
+    } else {
+      res.render("profilewarden", { warden: foundWarden });
+    }
+  });
+});
 //logout for student
 
 app.get("/logout", (req, res) => {
