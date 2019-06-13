@@ -207,6 +207,7 @@ app.post("/student/register", (req, res) => {
     var password = req.body.password;
     var password2 = req.body.password2;
     var hostel = req.body.hostel;
+    var image = req.body.image;
 
     req.checkBody("name", "Name is required").notEmpty();
     req.checkBody("username", "Username is required").notEmpty();
@@ -225,7 +226,8 @@ app.post("/student/register", (req, res) => {
         username: username,
         password: password,
         hostel: hostel,
-        type: type
+        type: type,
+        image: image
       });
       Warden.createWarden(newWarden, (err, warden) => {
         if (err) throw err;
@@ -464,15 +466,25 @@ app.get("/warden/login", (req, res) => {
 app.post(
   "/warden/login",
   passport.authenticate("warden", {
-    successRedirect: "/",
+    successRedirect: "/warden/home",
     failureRedirect: "/warden/login",
     failureFlash: true
   }),
   (req, res) => {
-    res.redirect("/");
+    res.redirect("/warden/home");
   }
 );
-
+app.get("/warden/home", ensureAuthenticated, (req, res) => {
+  Warden.find({}, (err, hod) => {
+    if (err) {
+      console.log("err");
+    } else {
+      res.render("homewarden", {
+        warden: req.user
+      });
+    }
+  });
+});
 //logout for student
 
 app.get("/logout", (req, res) => {
