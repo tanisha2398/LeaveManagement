@@ -418,8 +418,7 @@ app.post(
   }
 );
 app.get("/hod/home", ensureAuthenticated, (req, res) => {
-  // var student = req.user;
-  // console.log(student);
+  
   Hod.find({}, (err, hod) => {
     if (err) {
       console.log("err");
@@ -430,17 +429,17 @@ app.get("/hod/home", ensureAuthenticated, (req, res) => {
     }
   });
 });
-// app.get("/student/:id", ensureAuthenticated, (req, res) => {
-//   console.log(req.params.id);
-//   Student.findById(req.params.id).exec((err, foundStudent) => {
-//     if (err || !foundStudent) {
-//       req.flash("error", "Student not found");
-//       res.redirect("back");
-//     } else {
-//       res.render("profilestud", { student: foundStudent });
-//     }
-//   });
-// });
+app.get("/hod/:id", ensureAuthenticated, (req, res) => {
+  console.log(req.params.id);
+  Hod.findById(req.params.id).exec((err, foundHod) => {
+    if (err || !foundHod) {
+      req.flash("error", "Hod not found");
+      res.redirect("back");
+    } else {
+      res.render("profilehod", { hod: foundHod });
+    }
+  });
+});
 // app.get("/student/:id/edit", ensureAuthenticated, (req, res) => {
 //   Student.findById(req.params.id, (err, foundStudent) => {
 //     res.render("editS", { student: foundStudent });
