@@ -3,6 +3,7 @@ var express = require("express"),
   mongoose = require("mongoose"),
   expressvalidator = require("express-validator"),
   session = require("express-session"),
+  methodOverride = require("method-override"),
   bodyparser = require("body-parser"),
   passport = require("passport"),
   LocalStrategy = require("passport-local").Strategy,
@@ -27,6 +28,7 @@ mongoose
   });
 
 app.set("view engine", "ejs");
+app.use(methodOverride("_method"));
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + "/public"));
@@ -365,7 +367,7 @@ app.get("/student/home", ensureAuthenticated, (req, res) => {
     }
   });
 });
-app.get("/student/:id", (req, res) => {
+app.get("/student/:id", ensureAuthenticated, (req, res) => {
   console.log(req.params.id);
   Student.findById(req.params.id).exec((err, foundStudent) => {
     if (err || !foundStudent) {
@@ -376,12 +378,27 @@ app.get("/student/:id", (req, res) => {
     }
   });
 });
-app.get("/student/:id/edit", (req, res) => {
+app.get("/student/:id/edit", ensureAuthenticated, (req, res) => {
   Student.findById(req.params.id, (err, foundStudent) => {
     res.render("editS", { student: foundStudent });
   });
 });
-app;
+app.put("/student/:id", ensureAuthenticated, (req, res) => {
+  console.log(req.body.student);
+  Student.findByIdAndUpdate(
+    req.params.id,
+    req.body.student,
+    (err, updatedStudent) => {
+      if (err) {
+        req.flash("error", err.message);
+        res.redirect("back");
+      } else {
+        req.flash("success", "Succesfully updated");
+        res.redirect("/student/" + req.params.id);
+      }
+    }
+  );
+});
 
 app.get("/hod/login", (req, res) => {
   res.render("hodlogin");
