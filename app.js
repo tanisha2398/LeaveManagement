@@ -436,7 +436,7 @@ app.post("/student/:id/apply", (req, res) => {
           foundStud.leaves.push(newLeave);
           foundStud.save();
           req.flash("success", "Successfully applied for leave");
-          res.redirect("/student/home");
+          res.redirect("/student/home", { leave: newLeave });
         }
       });
     }
