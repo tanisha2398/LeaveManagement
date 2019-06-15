@@ -12,6 +12,7 @@ var express = require("express"),
   Student = require("./models/student"),
   Warden = require("./models/warden"),
   Hod = require("./models/hod");
+Leave = require("./models/leave");
 
 var url = "mongodb://localhost/LeaveApp";
 mongoose
@@ -404,6 +405,43 @@ app.put("/student/:id", ensureAuthenticated, (req, res) => {
   );
 });
 
+app.get("/student/:id/apply", ensureAuthenticated, (req, res) => {
+  Student.findById(req.params.id, (err, foundStud) => {
+    if (err) {
+      console.log(err);
+      res.redirect("back");
+    } else {
+      res.render("leaveApply", { student: foundStud });
+    }
+  });
+});
+
+app.post("/student/:id/apply", (req, res) => {
+  Student.findById(req.params.id, (err, foundStud) => {
+    if (err) {
+      res.redirect("/student/home");
+    } else {
+      console.log(req.body.leave);
+      Leave.create(req.body.leave, (err, newLeave) => {
+        if (err) {
+          req.flash("error", "Something went wrong");
+          res.redirect("back");
+          console.log(err);
+        } else {
+          newLeave.student.id = req.user.id;
+          newLeave.student.username = req.user.username;
+          console.log("leave is applied by--" + req.user.username);
+          newLeave.save();
+          console.log(newLeave);
+          foundStud.leaves.push(newLeave);
+          foundStud.save();
+          req.flash("success", "Successfully applied for leave");
+          res.redirect("/student/home");
+        }
+      });
+    }
+  });
+});
 app.get("/hod/login", (req, res) => {
   res.render("hodlogin");
 });

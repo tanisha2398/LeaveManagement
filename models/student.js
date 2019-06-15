@@ -9,7 +9,13 @@ var studentSchema = new mongoose.Schema({
   password: String,
   department: String,
   hostel: String,
-  image: String
+  image: String,
+  leaves: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Leave"
+    }
+  ]
 });
 studentSchema.plugin(passportLocalMongoose);
 var Student = (module.exports = mongoose.model("Student", studentSchema));
