@@ -476,6 +476,18 @@ app.post("/student/:id/apply", (req, res) => {
       }
     });
 });
+app.get("/student/:id/track", (req, res) => {
+  Student.findById(req.params.id)
+    .populate("leaves")
+    .exec((err, foundStud) => {
+      if (err) {
+        req.flash("error", "No student with requested id");
+        res.redirect("back");
+      } else {
+        res.render("trackLeave", { student: foundStud, moment: moment });
+      }
+    });
+});
 app.get("/hod/login", (req, res) => {
   res.render("hodlogin");
 });

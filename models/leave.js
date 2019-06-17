@@ -5,7 +5,19 @@ var leaveSchema = new mongoose.Schema(
     from: Date,
     to: Date,
     days: Number,
-    status: Boolean,
+    status: {
+      type: String,
+      enum: ["pending", "approved", "denied"],
+      default: "pending"
+    },
+    approved: {
+      type: Boolean,
+      default: false
+    },
+    denied: {
+      type: Boolean,
+      default: false
+    },
     stud: {
       id: {
         type: mongoose.Schema.Types.ObjectId,
