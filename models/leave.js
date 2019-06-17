@@ -5,7 +5,7 @@ var leaveSchema = new mongoose.Schema(
     from: Date,
     to: Date,
     status: Boolean,
-    student: {
+    stud: {
       id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Student"

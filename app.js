@@ -11,8 +11,8 @@ var express = require("express"),
   flash = require("connect-flash"),
   Student = require("./models/student"),
   Warden = require("./models/warden"),
-  Hod = require("./models/hod");
-Leave = require("./models/leave");
+  Hod = require("./models/hod"),
+  Leave = require("./models/leave");
 
 var url = "mongodb://localhost/LeaveApp";
 mongoose
@@ -360,28 +360,34 @@ app.post(
 );
 
 app.get("/student/home", ensureAuthenticated, (req, res) => {
-  // var student = req.user;
-  // console.log(student);
-  Student.find({}, (err, student) => {
-    if (err) {
-      console.log("err");
-    } else {
-      res.render("homestud", {
-        student: req.user
-      });
-    }
-  });
+  var student = req.user.username;
+  console.log(student);
+  Student.findOne({ username: req.user.username })
+    .populate("leaves")
+    .exec((err, student) => {
+      if (err || !student) {
+        req.flash("error", "student not found");
+        res.redirect("back");
+        console.log("err");
+      } else {
+        res.render("homestud", {
+          student: student
+        });
+      }
+    });
 });
 app.get("/student/:id", ensureAuthenticated, (req, res) => {
   console.log(req.params.id);
-  Student.findById(req.params.id).exec((err, foundStudent) => {
-    if (err || !foundStudent) {
-      req.flash("error", "Student not found");
-      res.redirect("back");
-    } else {
-      res.render("profilestud", { student: foundStudent });
-    }
-  });
+  Student.findById(req.params.id)
+    .populate("leaves")
+    .exec((err, foundStudent) => {
+      if (err || !foundStudent) {
+        req.flash("error", "Student not found");
+        res.redirect("back");
+      } else {
+        res.render("profilestud", { student: foundStudent });
+      }
+    });
 });
 app.get("/student/:id/edit", ensureAuthenticated, (req, res) => {
   Student.findById(req.params.id, (err, foundStudent) => {
@@ -417,7 +423,7 @@ app.get("/student/:id/apply", ensureAuthenticated, (req, res) => {
 });
 
 app.post("/student/:id/apply", (req, res) => {
-  Student.findById(req.params.id, (err, foundStud) => {
+  Student.findById(req.params.id, (err, student) => {
     if (err) {
       res.redirect("/student/home");
     } else {
@@ -428,15 +434,20 @@ app.post("/student/:id/apply", (req, res) => {
           res.redirect("back");
           console.log(err);
         } else {
-          newLeave.student.id = req.user.id;
-          newLeave.student.username = req.user.username;
+          newLeave.stud.id = req.user._id;
+          newLeave.stud.username = req.user.username;
           console.log("leave is applied by--" + req.user.username);
           newLeave.save();
           console.log(newLeave);
-          foundStud.leaves.push(newLeave);
-          foundStud.save();
+          console.log("////////////////////////////////////////");
+          console.log(student.leaves);
+          console.log(newLeave);
+          student.leaves.push(newLeave);
+          console.log("////////////////////////////////////////");
+          console.log(student.leaves);
+          student.save();
           req.flash("success", "Successfully applied for leave");
-          res.redirect("/student/home", { leave: newLeave });
+          res.render("homestud", { student: student });
         }
       });
     }

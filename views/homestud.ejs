@@ -48,6 +48,30 @@
       </div>
     </div>
 
+    <div class="container" style="border: 2px solid red">
+      <table style="width: 100%">
+        <tr>
+          <th>
+            Subject
+          </th>
+          <th>
+            From
+          </th>
+          <th>To</th>
+          <th>Days</th>
+        </tr>
+        <%student.leaves.forEach(function(leave){%>
+
+        <tr>
+          <td><%=leave.subject%></td>
+          <td><%=leave.from%></td>
+          <td><%=leave.to%></td>
+        </tr>
+
+        <%})%>
+      </table>
+    </div>
+
     <% include ./partial/footer %>
   </div>
 </div>
