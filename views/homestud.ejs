@@ -64,8 +64,11 @@
 
         <tr>
           <td><%=leave.subject%></td>
-          <td><%=leave.from%></td>
-          <td><%=leave.to%></td>
+          <td><%=moment(leave.from).format('MMM-DD-YYYY')%></td>
+          <td><%=moment(leave.to).format('MMM-DD-YYYY')%></td>
+          <td>
+            <%=moment(leave.from).format('MMM-DD-YYYY')-moment(leave.to).format('MMM-DD-YYYY')%>
+          </td>
         </tr>
 
         <%})%>
