@@ -4,6 +4,7 @@ var leaveSchema = new mongoose.Schema(
     subject: { type: String, required: "subject cant be blank" },
     from: Date,
     to: Date,
+    days: Number,
     status: Boolean,
     stud: {
       id: {

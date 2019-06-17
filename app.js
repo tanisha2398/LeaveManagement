@@ -433,9 +433,11 @@ app.post("/student/:id/apply", (req, res) => {
         res.redirect("/student/home");
       } else {
         date = new Date(req.body.leave.from);
+        todate = new Date(req.body.leave.to);
         year = date.getFullYear();
         month = date.getMonth() + 1;
         dt = date.getDate();
+        todt = todate.getDate();
 
         if (dt < 10) {
           dt = "0" + dt;
@@ -443,7 +445,8 @@ app.post("/student/:id/apply", (req, res) => {
         if (month < 10) {
           month = "0" + month;
         }
-
+        console.log(todt - dt);
+        req.body.leave.days = todt - dt;
         console.log(year + "-" + month + "-" + dt);
         // req.body.leave.to = req.body.leave.to.substring(0, 10);
         console.log(req.body.leave);
