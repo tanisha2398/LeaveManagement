@@ -764,6 +764,48 @@ app.get("/warden/:id/leave/:stud_id/info", (req, res) => {
     }
   });
 });
+
+app.post("/warden/:id/leave/:stud_id/info", (req, res) => {
+  Warden.findById(req.params.id).exec((err, wardenFound) => {
+    if (err) {
+      req.flash("error", "warden not found with requested id");
+      res.redirect("back");
+    } else {
+      Student.findById(req.params.stud_id)
+        .populate("leaves")
+        .exec((err, foundStudent) => {
+          if (err) {
+            req.flash("error", "student not found with this id");
+            res.redirect("back");
+          } else {
+            if (req.body.action === "Approve") {
+              foundStudent.leaves.forEach(function(leave) {
+                if (leave.wardenstatus === "pending") {
+                  leave.wardenstatus = "approved";
+
+                  leave.save();
+                }
+              });
+            } else {
+              console.log("u denied");
+              foundStudent.leaves.forEach(function(leave) {
+                if (leave.wardenstatus === "pending") {
+                  leave.wardenstatus = "denied";
+
+                  leave.save();
+                }
+              });
+            }
+            res.render("Wardenmoreinfostud", {
+              student: foundStudent,
+              warden: wardenFound,
+              moment: moment
+            });
+          }
+        });
+    }
+  });
+});
 //logout for student
 
 app.get("/logout", (req, res) => {
