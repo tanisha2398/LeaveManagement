@@ -8,7 +8,13 @@ var hodSchema = new mongoose.Schema({
   username: String,
   password: String,
   department: String,
-  image: String
+  image: String,
+  leaves: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Leave"
+    }
+  ]
 });
 
 hodSchema.plugin(passportLocalMongoose);
