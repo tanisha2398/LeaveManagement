@@ -544,49 +544,50 @@ app.put("/hod/:id", ensureAuthenticated, (req, res) => {
 });
 app.get("/hod/:id/leave", (req, res) => {
   Hod.findById(req.params.id)
-    .populate("leaves")
-    .exec((err, hodFound) => {
-      if (err) {
-        req.flash("error", "hod not found with requested id");
-        res.redirect("back");
-      } else {
-        // console.log(hodFound);
-        Student.find({ department: hodFound.department }, (err, students) => {
+  .exec((err, hodFound) => {
+    if (err) {
+      req.flash("error", "hod not found with requested id");
+      res.redirect("back");
+    } else {
+      // console.log(hodFound);
+      Student.find({ department: hodFound.department })
+        .populate("leaves")
+        .exec((err, students) => {
           if (err) {
             req.flash("error", "student not found with your department");
             res.redirect("back");
           } else {
-            students.forEach(function(student) {
-              if (student.leaves.length > 0) {
-                student.leaves.forEach(function(leave) {
-                  console.log(leave);
-                  console.log("////////////");
-                  Leave.findById(leave, (err, leaveFound) => {
-                    if (err) {
-                      req.flash("error", "leave not found");
-                      res.redirect("back");
-                    } else {
-                      // console.log(leaveFound.subject);
-                      res.render("hodLeaveSign", {
-                        hod: hodFound,
-                        students: students,
-                        leave: leaveFound,
-                        moment: moment
-                      });
-                    }
-                  });
-                });
-              }
-              // Leave.find({ username: student.username }, (err, leave) => {
-              //   console.log(leave.username);
-              // });
+            // students.forEach(function(student) {
+            //   if (student.leaves.length > 0) {
+            // student.leaves.forEach(function(leave) {
+            //   console.log(leave);
+            //   console.log("////////////");
+            // Leave.findById(leave, (err, leaveFound) => {
+            //   if (err) {
+            //     req.flash("error", "leave not found");
+            //     res.redirect("back");
+            //   } else {
+            //     // console.log(leaveFound.subject);
+            res.render("hodLeaveSign", {
+              hod: hodFound,
+              students: students,
+              // leave: leaveFound,
+              moment: moment
             });
+            //   }
+            // });
+            // });
+            // }
+            // Leave.find({ username: student.username }, (err, leave) => {
+            //   console.log(leave.username);
+            // });
+            // });
             // console.log(students);
           }
         });
-      }
-      // console.log(req.body.hod);
-    });
+    }
+    // console.log(req.body.hod);
+  });
 });
 app.get("/warden/login", (req, res) => {
   res.render("wardenlogin");

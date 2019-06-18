@@ -15,15 +15,15 @@
     <%students.forEach(function(student){%> <% if(student.leaves.length>0){%>
     <tr>
       <th><%=student.name%></th>
-
-      <th><%=moment(leave.from).format('DD/MM/YYYY')%></th>
-      <th><%=moment(leave.to).format('DD/MM/YYYY')%></th>
-      <th><%=leave.days%></th>
-      <th><%=leave.status%></th>
+      <%student.leaves.forEach(function(leave){%>
+      <td><%=moment(leave.from).format('DD/MM/YYYY')%></td>
+      <td><%=moment(leave.to).format('DD/MM/YYYY')%></td>
+      <td><%=leave.days%></td>
+      <td><%=leave.status%></td>
       <%if(leave.status==="pending"){%>
-      <th class="btn btn-primary">more</th>
+      <td><a href="#" class="btn btn-block btn-success">more info</a></td>
+      <%}})}%> <%})%>
     </tr>
-    <%}}%> <%})%>
   </table>
 </div>
 
