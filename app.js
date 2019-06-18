@@ -543,8 +543,7 @@ app.put("/hod/:id", ensureAuthenticated, (req, res) => {
   });
 });
 app.get("/hod/:id/leave", (req, res) => {
-  Hod.findById(req.params.id)
-  .exec((err, hodFound) => {
+  Hod.findById(req.params.id).exec((err, hodFound) => {
     if (err) {
       req.flash("error", "hod not found with requested id");
       res.redirect("back");
@@ -589,6 +588,72 @@ app.get("/hod/:id/leave", (req, res) => {
     // console.log(req.body.hod);
   });
 });
+
+app.get("/hod/:id/leave/:stud_id/info", (req, res) => {
+  Hod.findById(req.params.id).exec((err, hodFound) => {
+    if (err) {
+      req.flash("error", "hod not found with requested id");
+      res.redirect("back");
+    } else {
+      Student.findById(req.params.stud_id)
+        .populate("leaves")
+        .exec((err, foundStudent) => {
+          if (err) {
+            req.flash("error", "student not found with this id");
+            res.redirect("back");
+          } else {
+            res.render("moreinfostud", {
+              student: foundStudent,
+              hod: hodFound,
+              moment: moment
+            });
+          }
+        });
+    }
+  });
+});
+
+app.post("/hod/:id/leave/:stud_id/info", (req, res) => {
+  Hod.findById(req.params.id).exec((err, hodFound) => {
+    if (err) {
+      req.flash("error", "hod not found with requested id");
+      res.redirect("back");
+    } else {
+      Student.findById(req.params.stud_id)
+        .populate("leaves")
+        .exec((err, foundStudent) => {
+          if (err) {
+            req.flash("error", "student not found with this id");
+            res.redirect("back");
+          } else {
+            if (req.body.action === "Approve") {
+              foundStudent.leaves.forEach(function(leave) {
+                if (leave.status === "pending") {
+                  leave.status = "approved";
+                  leave.approved = true;
+                  leave.save();
+                }
+              });
+            } else {
+              console.log("u denied");
+              foundStudent.leaves.forEach(function(leave) {
+                if (leave.status === "pending") {
+                  leave.status = "denied";
+                  leave.save();
+                }
+              });
+            }
+            res.render("moreinfostud", {
+              student: foundStudent,
+              hod: hodFound,
+              moment: moment
+            });
+          }
+        });
+    }
+  });
+});
+
 app.get("/warden/login", (req, res) => {
   res.render("wardenlogin");
 });

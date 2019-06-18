@@ -21,7 +21,13 @@
       <td><%=leave.days%></td>
       <td><%=leave.status%></td>
       <%if(leave.status==="pending"){%>
-      <td><a href="#" class="btn btn-block btn-success">more info</a></td>
+      <td>
+        <a
+          href="/hod/<%=hod.id%>/leave/<%=student.id%>/info"
+          class="btn btn-block btn-success"
+          >more info</a
+        >
+      </td>
       <%}})}%> <%})%>
     </tr>
   </table>
