@@ -17,9 +17,9 @@ margin-top: -181px;border: 1px solid pink ;  text-align: -webkit-center;"
         </th>
         <th>To</th>
         <th>Days</th>
-        <th>Status</th>
-        <th>Approved</th>
-        <th>Rejected</th>
+        <th>HOD Status</th>
+        <th>Warden Status</th>
+        
       </tr>
       <%student.leaves.forEach(function(leave){%>
 
@@ -29,8 +29,8 @@ margin-top: -181px;border: 1px solid pink ;  text-align: -webkit-center;"
         <td><%=moment(leave.to).format('DD/MM/YYYY')%></td>
         <td><%=leave.days%></td>
         <td><%=leave.status%></td>
-        <td><%=leave.approved%></td>
-        <td><%=leave.denied%></td>
+        <td><%=leave.wardenstatus%></td>
+        
       </tr>
 
       <%})%>

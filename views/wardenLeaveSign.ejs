@@ -1,0 +1,36 @@
+<% include ./partial/header %>
+<div class="container" style="border: 2px solid red">
+  <table style="width: 100%">
+    <tr>
+      <th>
+        Student Name
+      </th>
+      <th>
+        From
+      </th>
+      <th>To</th>
+      <th>Days</th>
+      <th>Status</th>
+    </tr>
+    <%students.forEach(function(student){%> <% if(student.leaves.length>0){%>
+    <tr>
+      <th><%=student.name%></th>
+      <%student.leaves.forEach(function(leave){%>
+      <td><%=moment(leave.from).format('DD/MM/YYYY')%></td>
+      <td><%=moment(leave.to).format('DD/MM/YYYY')%></td>
+      <td><%=leave.days%></td>
+      <td><%=leave.wardenstatus%></td>
+      <%if(leave.wardenstatus==="pending"){%>
+      <td>
+        <a
+          href="/warden/<%=warden.id%>/leave/<%=student.id%>/info"
+          class="btn btn-block btn-success"
+          >more info</a
+        >
+      </td>
+      <%}})}%> <%})%>
+    </tr>
+  </table>
+</div>
+
+<% include ./partial/footer %>

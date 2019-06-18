@@ -639,6 +639,7 @@ app.post("/hod/:id/leave/:stud_id/info", (req, res) => {
               foundStudent.leaves.forEach(function(leave) {
                 if (leave.status === "pending") {
                   leave.status = "denied";
+                  leave.denied = true;
                   leave.save();
                 }
               });
@@ -713,6 +714,35 @@ app.put("/warden/:id", ensureAuthenticated, (req, res) => {
       }
     }
   );
+});
+
+app.get("/warden/:id/leave", (req, res) => {
+  Warden.findById(req.params.id).exec((err, wardenFound) => {
+    if (err) {
+      req.flash("error", "hod not found with requested id");
+      res.redirect("back");
+    } else {
+      // console.log(hodFound);
+      Student.find({ hostel: wardenFound.hostel })
+        .populate("leaves")
+        .exec((err, students) => {
+          if (err) {
+            req.flash("error", "student not found with your department");
+            res.redirect("back");
+          } else {
+            
+            res.render("wardenLeaveSign", {
+              warden: wardenFound,
+              students: students,
+              
+              moment: moment
+            });
+          
+          }
+        });
+    }
+    
+  });
 });
 //logout for student
 
