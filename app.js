@@ -730,18 +730,38 @@ app.get("/warden/:id/leave", (req, res) => {
             req.flash("error", "student not found with your department");
             res.redirect("back");
           } else {
-            
             res.render("wardenLeaveSign", {
               warden: wardenFound,
               students: students,
-              
+
               moment: moment
             });
-          
           }
         });
     }
-    
+  });
+});
+app.get("/warden/:id/leave/:stud_id/info", (req, res) => {
+  Warden.findById(req.params.id).exec((err, wardenFound) => {
+    if (err) {
+      req.flash("error", "warden not found with requested id");
+      res.redirect("back");
+    } else {
+      Student.findById(req.params.stud_id)
+        .populate("leaves")
+        .exec((err, foundStudent) => {
+          if (err) {
+            req.flash("error", "student not found with this id");
+            res.redirect("back");
+          } else {
+            res.render("Wardenmoreinfostud", {
+              student: foundStudent,
+              warden: wardenFound,
+              moment: moment
+            });
+          }
+        });
+    }
   });
 });
 //logout for student
