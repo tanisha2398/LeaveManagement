@@ -15,6 +15,11 @@ var leaveSchema = new mongoose.Schema(
       enum: ["pending", "approved", "denied"],
       default: "pending"
     },
+    finalstatus: {
+      type: String,
+      enum: ["pending", "approved", "denied"],
+      default: "pending"
+    },
     approved: {
       type: Boolean,
       default: false

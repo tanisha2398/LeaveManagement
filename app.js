@@ -484,6 +484,7 @@ app.get("/student/:id/track", (req, res) => {
         req.flash("error", "No student with requested id");
         res.redirect("back");
       } else {
+        
         res.render("trackLeave", { student: foundStud, moment: moment });
       }
     });
@@ -810,7 +811,7 @@ app.post("/warden/:id/leave/:stud_id/info", (req, res) => {
 
 app.get("/logout", (req, res) => {
   req.logout();
-  req.flash("success", "you are logged out");
+  // req.flash("success", "you are logged out");
   res.redirect("/");
 });
 

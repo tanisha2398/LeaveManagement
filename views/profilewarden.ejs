@@ -1,9 +1,12 @@
-<% include ./partial/header %>
-<div class="container">
-  <div class="row">
-    <div class="col-sm-12" style="margin: auto;    text-align: -webkit-center;">
+<% include ./partial/header %> <% include ./partial/wardenfunction%>
+
+
+<div class="col-sm-6" style="    flex: 0 0 50%;
+max-width: 50%;
+margin-left: 431px;
+margin-top: -251px;border: 1px solid pink ;  text-align: -webkit-center;">
       <div class="thumbnail">
-        <img style="border-radius: 100%" src="<%=warden.image%>" />
+        <img style="height:150px;width:150px;border-radius: 100%" src="<%=warden.image%>" />
         <h1><strong>Name:</strong> <%=warden.name%></h1>
         <h4><strong>Type:</strong><%=warden.type%></h4>
 

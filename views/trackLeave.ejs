@@ -19,6 +19,7 @@ margin-top: -181px;border: 1px solid pink ;  text-align: -webkit-center;"
         <th>Days</th>
         <th>HOD Status</th>
         <th>Warden Status</th>
+        <th>Final Status</th>
         
       </tr>
       <%student.leaves.forEach(function(leave){%>
@@ -30,7 +31,13 @@ margin-top: -181px;border: 1px solid pink ;  text-align: -webkit-center;"
         <td><%=leave.days%></td>
         <td><%=leave.status%></td>
         <td><%=leave.wardenstatus%></td>
-        
+        <%if(leave.status==="approved" && leave.wardenstatus==="approved"){%>
+         <%leave.finalstatus="approved"%>
+        <%}%>
+        <%if(leave.status==="denied" && leave.wardenstatus==="denied"){%>
+          <%leave.finalstatus="deniedd"%>
+         <%}%>
+        <td><%=leave.finalstatus%></td>
       </tr>
 
       <%})%>

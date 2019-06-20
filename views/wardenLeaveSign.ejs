@@ -1,7 +1,18 @@
-<% include ./partial/header %>
-<div class="container" style="border: 2px solid red">
-  <table style="width: 100%">
-    <tr>
+<% include ./partial/header %> <% include ./partial/wardenfunction%>
+<div
+  class="col-sm-6"
+  style="    flex: 0 0 50%;
+    max-width: 70%;
+    margin-left: 431px;
+    margin-top: -251px;border: 1px solid pink ;  text-align: -webkit-center;"
+>
+  <table
+    class="content-table"
+    style="margin: 50px auto;min-width:400px;width: 90%; box-shadow: 0 0 20px rgba(0,0,0,0.15);"
+  >
+    <tr
+      style="background-color: rgb(9, 1, 19); border-radius: 5px 5px 0 0;overflow: hidden;  color: #ffffff;text-align: left; font-weight: bold;"
+    >
       <th>
         Student Name
       </th>
@@ -12,6 +23,7 @@
       <th>To</th>
       <th>Days</th>
       <th>Status</th>
+      <th></th>
     </tr>
     <%students.forEach(function(student){%> <% if(student.leaves.length>0){%>
     <tr>
@@ -22,15 +34,17 @@
       <td><%=moment(leave.to).format('DD/MM/YYYY')%></td>
       <td><%=leave.days%></td>
       <td><%=leave.wardenstatus%></td>
-      <%if(leave.wardenstatus==="pending"){%>
+
       <td>
+        <%if(leave.wardenstatus==="pending"){%>
         <a
           href="/warden/<%=warden.id%>/leave/<%=student.id%>/info"
           class="btn btn-block btn-success"
           >more info</a
         >
+        <%}%>
       </td>
-      <%}})}%> <%})%>
+      <%})}%> <%})%>
     </tr>
   </table>
 </div>

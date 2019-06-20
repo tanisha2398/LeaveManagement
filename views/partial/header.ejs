@@ -21,8 +21,11 @@
 
     <link rel="stylesheet" href="/stylesheets/app.css" />
   </head>
-  <body data-spy="scroll" data-target="navbarResponsive">
-    <nav class="navbar navbar-default navbar-expand-lg navbar-dark fixed-top">
+  <body data-spy="scroll" data-target="#mainNavbar" data-offset="10">
+    <nav
+      id="mainNavbar"
+      class="navbar navbar-default navbar-expand-lg navbar-dark navbar-fixed-top"
+    >
       <div class="container">
         <a class="navbar-brand" href="/">Navbar</a>
         <button
@@ -43,7 +46,7 @@
             style=" list-style-type: none;
           margin: 0;
           padding: 0;
-          width: 80px;"
+          width: 363px;"
           >
             <% if(user){%>
             <li><a href="#">Signed in as <%= user.type%></a></li>
@@ -55,6 +58,12 @@
             </li>
 
             <%}%> <% if(!user){%>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#scrollspy1">About Us </a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" href="/register">Register </a>
             </li>
@@ -70,11 +79,16 @@
               >
                 Login
               </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="/student/login">Student</a>
-                <a class="dropdown-item" href="/hod/login">HOD</a>
-                <a class="dropdown-item" href="/warden/login">Warden</a>
-              </div>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                  <a class="dropdown-item" href="/student/login">Student</a>
+                </li>
+                <li><a class="dropdown-item" href="/hod/login">HOD</a></li>
+
+                <li>
+                  <a class="dropdown-item" href="/warden/login">Warden</a>
+                </li>
+              </ul>
             </li>
             <%}%>
           </ul>
