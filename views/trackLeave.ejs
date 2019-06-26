@@ -35,7 +35,13 @@ margin-top: -181px;border: 1px solid pink ;  text-align: -webkit-center;"
          <%leave.finalstatus="approved"%>
         <%}%>
         <%if(leave.status==="denied" && leave.wardenstatus==="denied"){%>
-          <%leave.finalstatus="deniedd"%>
+          <%leave.finalstatus="denied"%>
+         <%}%>
+         <%if(leave.status==="denied" && leave.wardenstatus==="approved"){%>
+          <%leave.finalstatus="denied"%>
+         <%}%>
+         <%if(leave.status==="approved" && leave.wardenstatus==="denied"){%>
+          <%leave.finalstatus="denied"%>
          <%}%>
         <td><%=leave.finalstatus%></td>
       </tr>
