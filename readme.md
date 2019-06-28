@@ -2,7 +2,7 @@
 
 This project is an interactive leave application portal which includes Student login,HOD login and Warden Login. Student can apply leaves and view their leave status. HOD can either accept or reject the leave for student studying in his/her department. Warden can either accept or reject the leave for student living in his/her hostel.
 
-##Technology Stack Used :
+## Technology Stack Used :
 
 - Backednd : NodeJS,
 - Database : Mongodb
