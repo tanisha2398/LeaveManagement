@@ -28,3 +28,5 @@ This project is an interactive leave application portal which includes Student l
 ## Screenshot
 
 ![lms](https://user-images.githubusercontent.com/28656259/60335755-40b4c180-99bc-11e9-8738-3b40bb1b28c7.png)
+![student](https://user-images.githubusercontent.com/28656259/60340832-4d401680-99ca-11e9-9257-78e65fb3a4af.PNG)
+![lms2](https://user-images.githubusercontent.com/28656259/60340838-50d39d80-99ca-11e9-9c0f-b5cb9fc5172d.png)
