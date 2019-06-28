@@ -1,42 +1,12 @@
 <% include ./partial/header %>
-<script>
-  $(document).ready(function() {
-    $('[data-toggle="tooltip"]').tooltip();
-  });
-</script>
-<h1 style="margin-top: 61px; font-size: 20px;">Welcome, <%=student.name%></h1>
-<div class="container">
-  <div class="row">
-    <div class="col-sm-3" style="list-style-type: none;">
-      <li>
-        <a
-          href="/student/<%=student._id%>"
-          data-toggle="tooltip"
-          title="Click to see your profile"
-          data-placement="left"
-          class="btn btn-primary btn-lg"
-          style="width: 210px;margin-top: 10px;"
-          >Profile</a
-        >
-      </li>
-      <li>
-        <a
-          href="/student/<%=student._id%>/apply"
-          class="btn btn-success btn-lg"
-          style="width: 210px;margin-top: 10px;"
-          >Apply For Leave</a
-        >
-      </li>
-      <li>
-        <a
-          href="/student/<%=student._id%>/track"
-          class="btn btn-info btn-lg"
-          style="width: 210px;margin-top: 10px;"
-          >Track Leave</a
-        >
-      </li>
-    </div>
-    <div class="col-sm-9" style="margin: auto;    text-align: -webkit-center;">
+<% include ./partial/studfunction %> 
+<div
+class="col-sm-6"
+style="    flex: 0 0 50%;
+max-width: 60%;
+margin-left: 431px;
+margin-top: -181px;  text-align: -webkit-center;"
+>
       <div class="thumbnail">
         <img
           style="height:150px;width:150px;border-radius: 100%"
@@ -51,9 +21,11 @@
       </div>
     </div>
 
-    <div class="container" style="border: 2px solid red">
-      <table style="width: 100%">
-        <tr>
+    <div class="container" >
+      <table class="content-table"
+      style="margin: 50px auto;min-width:400px;width: 90%; box-shadow: 0 0 20px rgba(0,0,0,0.15);">
+        <tr  style="background-color: rgb(9, 1, 19); border-radius: 5px 5px 0 0;overflow: hidden;  color: #ffffff;text-align: left; font-weight: bold;"
+        >
           <th>
             Subject
           </th>

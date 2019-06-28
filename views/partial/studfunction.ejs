@@ -7,17 +7,28 @@
 <div class="container">
   <div
     class="row"
-    style="border: 1px solid green;    margin-left: -36px;
+    style="   margin-left: -36px;
   margin-right: 899px;"
   >
     <div class="col-sm-3" style="list-style-type: none;">
+      <li>
+        <a
+          href="/student/home"
+          data-toggle="tooltip"
+          title="Click to see your profile"
+          data-placement="left"
+          class="btn btn-info btn-lg"
+          style="width: 210px;margin-top: 10px;"
+          >Home</a
+        >
+      </li>
       <li>
         <a
           href="/student/<%=student._id%>"
           data-toggle="tooltip"
           title="Click to see your profile"
           data-placement="left"
-          class="btn btn-primary btn-lg"
+          class="btn btn-info btn-lg"
           style="width: 210px;margin-top: 10px;"
           >Profile</a
         >
@@ -25,7 +36,7 @@
       <li>
         <a
           href="/student/<%=student._id%>/apply"
-          class="btn btn-success btn-lg"
+          class="btn btn-info btn-lg"
           style="width: 210px;margin-top: 10px;"
           >Apply For Leave</a
         >

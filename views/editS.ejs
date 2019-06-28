@@ -4,7 +4,7 @@
   style=" position: relative;
 border-radius: 5px;
 background-color: #f2f2f2;
-padding: 20px 0 30px 0;
+padding: 60px 0 30px 0;
 width: 40%;
 
 "
@@ -12,7 +12,7 @@ width: 40%;
 
     
     
-      <form action="/student/<%=student._id%>?_method=PUT" method="POST">
+      <form action="/student/<%=student._id%>?_method=PUT" method="POST" style="margin-top: 20px;">
         <div class="row">
           <div class="col">
               <h1 style="text-align:center;">Edit Profile <%= student.name%></h1>
@@ -88,7 +88,7 @@ width: 40%;
         </div>
         
       </form>
-      <a href="/student/profile">Back</a>
+      <a href="/student/<%= student.id%>">Back</a>
     </div>
   </div>
 </div>
