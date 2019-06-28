@@ -5,7 +5,7 @@
   style="    flex: 0 0 50%;
 max-width: 50%;
 margin-left: 431px;
-margin-top: -181px;border: 1px solid pink ;  text-align: -webkit-center;"
+margin-top: -181px;  text-align: -webkit-center;"
 >
   <h1>Apply for leave here <%=student.name%></h1>
   <form action="/student/<%=student._id%>/apply" method="POST">
@@ -40,6 +40,6 @@ margin-top: -181px;border: 1px solid pink ;  text-align: -webkit-center;"
       <button class="btn btn-lg btn-block btn-default">Submit</button>
     </div>
   </form>
-  <a href="/student/home">back</a>
+
   <% include ./partial/footer %>
 </div>

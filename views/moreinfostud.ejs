@@ -8,7 +8,7 @@
 >
   <form action="/hod/<%=hod.id%>/leave/<%=student.id%>/info" method="POST">
     <div class="container-fluid bg-3 text-center">
-      <h1><%=student.name %></h1>
+      <h1 style="margin-top: 40px;"><%=student.name %></h1>
       <br />
       <div class="row">
         <div class="col-sm-4">
@@ -19,7 +19,7 @@
           />
         </div>
         <%student.leaves.forEach(function(leave){%>
-        <div class="col-sm-4">
+        <div class="col-sm-4" style="width: 100%">
           <h3><strong> Subject:</strong><%=leave.subject %></h3>
           <h3>Status:<%=leave.status %></h3>
           <h3>From:<%=moment(leave.to).format('DD/MM/YYYY') %></h3>
