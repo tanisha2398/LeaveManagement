@@ -16,7 +16,7 @@ var express = require("express"),
 
 var moment = require("moment");
 
-var url = "mongodb://127.0.0.1/LeaveApp";
+var url = "mongodb://localhost/LeaveApp"||"mongodb+srv://tanishanegi:<tanishanegi>@cluster0-nzmyi.mongodb.net/test?retryWrites=true&w=majority";
 mongoose
   .connect(url, {
     useNewUrlParser: true,
